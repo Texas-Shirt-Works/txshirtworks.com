@@ -187,7 +187,7 @@
         if (status) status.textContent = "Got it — we'll be in touch shortly.";
       }).catch(function () {
         if (status) {
-          status.textContent = "Something went wrong. Please call (936) 448-5900 or email support@txshirtworks.com.";
+          status.textContent = "Something went wrong. Please call (936) 297-6400 or email support@txshirtworks.com.";
           status.classList.add("is-error");
         }
       }).finally(function () {
