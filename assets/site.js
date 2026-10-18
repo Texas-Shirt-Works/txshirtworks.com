@@ -155,8 +155,6 @@
   };
 
   document.querySelectorAll("form[data-intake]").forEach(function (form) {
-    setIntakeSubmitEnabled(form, Boolean(turnstileToken(form)));
-
     form.addEventListener("submit", function (event) {
       event.preventDefault();
       if (form.getAttribute("data-submitting") === "true") return;
@@ -249,4 +247,5 @@
       });
     });
   });
+  window.addEventListener("load",function(){if(!window.turnstile)document.querySelectorAll("form[data-intake]").forEach(function(f){setIntakeSubmitEnabled(f,true)})});
 })();
