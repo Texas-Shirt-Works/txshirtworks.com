@@ -90,9 +90,9 @@
           <label for="website">Website</label>
           <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
         </div>
-        <div class="cf-turnstile" data-sitekey="0x4AAAAAAD8MVIhSPLH80f6N" data-theme="auto"></div>
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAD8MVIhSPLH80f6N" data-theme="auto" data-callback="onTurnstileSuccess" data-expired-callback="onTurnstileExpired" data-error-callback="onTurnstileError"></div>
         <div>
-          <button class="button button--dark" type="submit">Send</button>
+          <button class="button button--dark" type="submit" disabled>Send</button>
           <p class="form-status" data-status role="status"></p>
         </div>
       </form>
