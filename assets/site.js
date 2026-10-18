@@ -115,9 +115,52 @@
 
   var endpoint = "https://agii-vapi-bridge-9383.twil.io/web-contact";
 
+  function resetTurnstile() {
+    if (window.turnstile && typeof window.turnstile.reset === "function") {
+      window.turnstile.reset();
+    }
+  }
+
+  function turnstileToken(form) {
+    var field = form.querySelector("[name='cf-turnstile-response']");
+    if (field && field.value) return field.value;
+    if (window.turnstile && typeof window.turnstile.getResponse === "function") {
+      try { return window.turnstile.getResponse() || ""; } catch (err) { return ""; }
+    }
+    return "";
+  }
+
+  function setIntakeSubmitEnabled(form, enabled) {
+    var submit = form.querySelector("[type='submit']");
+    if (submit) submit.disabled = !enabled;
+  }
+
+  window.onTurnstileSuccess = function () {
+    document.querySelectorAll("form[data-intake]").forEach(function (form) {
+      if (form.getAttribute("data-submitting") === "true") return;
+      setIntakeSubmitEnabled(form, true);
+    });
+  };
+
+  window.onTurnstileExpired = function () {
+    document.querySelectorAll("form[data-intake]").forEach(function (form) {
+      setIntakeSubmitEnabled(form, false);
+    });
+  };
+
+  window.onTurnstileError = function () {
+    document.querySelectorAll("form[data-intake]").forEach(function (form) {
+      setIntakeSubmitEnabled(form, false);
+    });
+  };
+
   document.querySelectorAll("form[data-intake]").forEach(function (form) {
+    setIntakeSubmitEnabled(form, Boolean(turnstileToken(form)));
+
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+      if (form.getAttribute("data-submitting") === "true") return;
+
       var status = form.querySelector("[data-status]");
       var submit = form.querySelector("[type='submit']");
       var data = Object.fromEntries(new FormData(form).entries());
@@ -153,6 +196,16 @@
         return;
       }
 
+      var token = turnstileToken(form);
+      if (!token) {
+        if (status) {
+          status.textContent = "Please wait for the verification check to finish, then press Send.";
+          status.classList.add("is-error");
+        }
+        return;
+      }
+      data["cf-turnstile-response"] = token;
+
       if (form.id === "custom-form") {
         var lines = [
           "Custom apparel intake",
@@ -172,6 +225,7 @@
         status.textContent = "Sending…";
         status.classList.remove("is-error");
       }
+      form.setAttribute("data-submitting", "true");
       if (submit) submit.disabled = true;
 
       fetch(endpoint, {
@@ -181,17 +235,17 @@
       }).then(function (response) {
         if (!response.ok) throw new Error("bad status");
         form.reset();
-        if (window.turnstile && typeof window.turnstile.reset === "function") {
-          window.turnstile.reset();
-        }
+        resetTurnstile();
         if (status) status.textContent = "Got it — we'll be in touch shortly.";
       }).catch(function () {
+        resetTurnstile();
         if (status) {
           status.textContent = "Something went wrong. Please call (936) 297-6400 or email support@txshirtworks.com.";
           status.classList.add("is-error");
         }
       }).finally(function () {
-        if (submit) submit.disabled = false;
+        form.removeAttribute("data-submitting");
+        setIntakeSubmitEnabled(form, false);
       });
     });
   });
