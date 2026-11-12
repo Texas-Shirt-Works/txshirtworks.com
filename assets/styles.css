@@ -164,10 +164,13 @@ main { flex: 1; }
 .header-inner {
   display: grid;
   grid-template-columns: 4.4rem 1fr 4.4rem;
+  grid-template-areas:
+    "toggle logo ."
+    "call call call";
   align-items: center;
   min-height: var(--header-h);
   padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.8rem;
 }
 
 html:not(.js) .header-inner {
@@ -179,6 +182,7 @@ html:not(.js) .nav-toggle { display: none; }
 html:not(.js) .logo { display: inline-flex; margin: 0.8rem 0; }
 
 .logo {
+  grid-area: logo;
   justify-self: center;
   display: flex;
   align-items: center;
@@ -186,7 +190,38 @@ html:not(.js) .logo { display: inline-flex; margin: 0.8rem 0; }
 
 .logo img { height: 3.8rem; width: auto; }
 
+.header-call {
+  grid-area: call;
+  justify-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  min-height: 4.4rem;
+  min-width: 4.4rem;
+  margin-top: 0.4rem;
+  padding: 0 1.6rem;
+  border-radius: var(--radius);
+  background: var(--scheme5);
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.5rem;
+  letter-spacing: 0.06rem;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.header-call:hover {
+  background: var(--footer);
+  color: #fff;
+}
+
+.header-call__icon {
+  flex-shrink: 0;
+}
+
 .nav-toggle {
+  grid-area: toggle;
   justify-self: start;
   width: 4.4rem;
   height: 4.4rem;
@@ -323,6 +358,23 @@ html:not(.js) .logo { display: inline-flex; margin: 0.8rem 0; }
   .sub-toggle { display: none; }
 
   .logo { justify-self: auto; }
+
+  .header-call {
+    justify-self: auto;
+    margin-top: 0;
+    margin-left: auto;
+    background: transparent;
+    color: var(--ink);
+    border: 0.1rem solid rgba(43, 44, 45, 0.28);
+    font-size: 1.4rem;
+    padding: 0 1.4rem;
+  }
+
+  .header-call:hover {
+    background: var(--bg-white);
+    color: var(--ink);
+    border-color: var(--ink);
+  }
 
   .js .site-nav,
   .site-nav {
