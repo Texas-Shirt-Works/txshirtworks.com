@@ -7,6 +7,7 @@
   --button: #b7aca2;
   --button-text: #262626;
   --button-dark: #797068;
+  --label-dark: #46413c;
   --sand: #c2b7ac;
   --scheme5: #323841;
   --footer: #1c2228;
@@ -629,7 +630,7 @@ html:not(.js) .logo { display: inline-flex; margin: 0.8rem 0; }
   letter-spacing: 0.12rem;
   text-transform: uppercase;
   margin-bottom: 0.8rem;
-  color: var(--button-dark);
+  color: var(--label-dark);
 }
 
 .actions { display: flex; flex-wrap: wrap; gap: 1.2rem 1.6rem; align-items: center; margin-top: 2rem; }
@@ -673,7 +674,7 @@ html:not(.js) .logo { display: inline-flex; margin: 0.8rem 0; }
   font-size: 1.3rem;
   letter-spacing: 0.12rem;
   text-transform: uppercase;
-  color: var(--button-dark);
+  color: var(--label-dark);
   margin-bottom: 0.6rem;
 }
 
